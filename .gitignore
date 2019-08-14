@@ -1,0 +1,14 @@
+# Common for all the projects
+
+obj
+bin
+.vscode
+.vs
+
+# For Web App
+lib
+site.min.js
+site.min.css
+
+# For CI
+global.json
