@@ -38,13 +38,13 @@ namespace bookmarks.Middlewares
                 var jsonResult = string.Empty;
                 using (var client = new HttpClient(handler))
                 {
-                    var res = await client.GetAsync($"{uriString}/.auth/me");
-                    jsonResult = await res.Content.ReadAsStringAsync();
+                    var httpResponseMessage = await client.GetAsync($"{uriString}/.auth/me");
+                    jsonResult = await httpResponseMessage.Content.ReadAsStringAsync();
                 }
-                var obj = JArray.Parse(jsonResult);
-                var user_id = obj[0]["user_id"].Value<string>();
+                var claimsArray = JArray.Parse(jsonResult);
+                var user_id = claimsArray[0]["user_id"].Value<string>();
                 var claims = new List<Claim>();
-                foreach (var claim in obj[0]["user_claims"])
+                foreach (var claim in claimsArray[0]["user_claims"])
                 {
                     claims.Add(new Claim(claim["typ"].ToString(), claim["val"].ToString()));
                 }
