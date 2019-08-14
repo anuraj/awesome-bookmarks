@@ -17,12 +17,10 @@ namespace bookmarks.Middlewares
     public class EasyAuthMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly BookmarksDbContext _bookmarkDbContext;
-        public EasyAuthMiddleware(RequestDelegate next,
-            BookmarksDbContext bookmarkDbContext)
+        // private readonly BookmarksDbContext _bookmarkDbContext;
+        public EasyAuthMiddleware(RequestDelegate next)
         {
             _next = next;
-            _bookmarkDbContext = bookmarkDbContext;
         }
         public async Task InvokeAsync(HttpContext context)
         {
@@ -52,16 +50,13 @@ namespace bookmarks.Middlewares
                 foreach (var claim in claimsArray[0]["user_claims"])
                 {
                     claims.Add(new Claim(claim["typ"].ToString(), claim["val"].ToString()));
+                    await context.Response.WriteAsync(claim["typ"].ToString() + "=" + claim["val"].ToString())
                 }
                 var identity = new GenericIdentity(azureAppServicePrincipalNameHeader);
                 identity.AddClaims(claims);
                 context.User = new GenericPrincipal(identity, null);
-                if (!_bookmarkDbContext.Users.Any(user => user.ProviderId == user_id))
-                {
-                    var user = new User() { Name = context.User.Identity.Name, ProviderId = user_id };
-                    _bookmarkDbContext.Users.Add(user);
-                    await _bookmarkDbContext.SaveChangesAsync();
-                }
+
+
             };
 
             await _next(context);
