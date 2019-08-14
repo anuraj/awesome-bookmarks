@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "jquery@3.3.1",
+      "files": [
+        "dist/jquery.min.js"
+      ],
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "bootstrap@4.1.3",
+      "files": [
+        "dist/js/bootstrap.bundle.min.js",
+        "dist/css/bootstrap.min.css"
+      ],
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "jquery-validation@1.18.0",
+      "files": [
+        "dist/jquery.validate.min.js",
+        "dist/additional-methods.min.js"
+      ],
+      "destination": "wwwroot/lib/jquery-validation/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.10",
+      "files": [
+        "dist/jquery.validate.unobtrusive.min.js"
+      ],
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "files": [
+        "dist/jquery.unobtrusive-ajax.js"
+      ],
+      "destination": "wwwroot/lib/jquery-ajax-unobtrusive/"
+    },
+    {
+      "library": "toastr@2.1.4",
+      "files": [
+        "build/toastr.min.css",
+        "build/toastr.min.js"
+      ],
+      "destination": "wwwroot/lib/toastr/"
+    }
+  ]
+}
