@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using bookmarks.Models;
+using bookmarks.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 
@@ -14,10 +17,12 @@ namespace bookmarks.Middlewares
     public class EasyAuthMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public EasyAuthMiddleware(RequestDelegate next)
+        private readonly BookmarksDbContext _bookmarkDbContext;
+        public EasyAuthMiddleware(RequestDelegate next,
+            BookmarksDbContext bookmarkDbContext)
         {
             _next = next;
+            _bookmarkDbContext = bookmarkDbContext;
         }
         public async Task InvokeAsync(HttpContext context)
         {
@@ -51,6 +56,12 @@ namespace bookmarks.Middlewares
                 var identity = new GenericIdentity(azureAppServicePrincipalNameHeader);
                 identity.AddClaims(claims);
                 context.User = new GenericPrincipal(identity, null);
+                if (!_bookmarkDbContext.Users.Any(user => user.ProviderId == user_id))
+                {
+                    var user = new User() { Name = context.User.Identity.Name, ProviderId = user_id };
+                    _bookmarkDbContext.Users.Add(user);
+                    await _bookmarkDbContext.SaveChangesAsync();
+                }
             };
 
             await _next(context);

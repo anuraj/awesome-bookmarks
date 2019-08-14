@@ -9,6 +9,10 @@ bin
 lib
 site.min.js
 site.min.css
+appsettings.json
+
+# Database Migrations
+Migrations
 
 # For CI
 global.json

@@ -1,3 +1,5 @@
+using bookmarks.Models;
+
 namespace bookmarks.Services
 {
     public interface IUserService
@@ -5,5 +7,6 @@ namespace bookmarks.Services
         bool IsAuthenticated { get; }
         string Id { get; }
         string Name { get; }
+        User User { get; }
     }
 }
