@@ -50,7 +50,7 @@ namespace bookmarks.Middlewares
                 foreach (var claim in claimsArray[0]["user_claims"])
                 {
                     claims.Add(new Claim(claim["typ"].ToString(), claim["val"].ToString()));
-                    await context.Response.WriteAsync(claim["typ"].ToString() + "=" + claim["val"].ToString())
+                    await context.Response.WriteAsync(claim["typ"].ToString() + "=" + claim["val"].ToString());
                 }
                 var identity = new GenericIdentity(azureAppServicePrincipalNameHeader);
                 identity.AddClaims(claims);
