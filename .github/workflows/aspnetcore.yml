@@ -14,11 +14,10 @@ jobs:
       with:
         version: 2.2.108
     - name: Build with dotnet
-      run: dotnet build --configuration Release
-    - name: Run Tests
-      run: dotnet test
+      run: dotnet publish -c Release
     - name: Deploy to Azure
       uses: azure/appservice-actions/webapp@master
       with: 
         app-name: awesome-bookmarks
         publish-profile: ${{ secrets.PUBLISH_PROFILE }}
+        package: /home/runner/work/awesome-bookmarks/awesome-bookmarks/src/bookmarks/bin/Release/netcoreapp2.2/publish/
