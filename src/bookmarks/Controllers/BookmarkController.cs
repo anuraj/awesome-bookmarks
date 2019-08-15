@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using bookmarks.Models;
 using bookmarks.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace bookmarks.Controllers
 {
+    [Authorize]
     public class BookmarkController : Controller
     {
         private readonly BookmarksDbContext _bookmarksDbContext;
@@ -18,22 +20,9 @@ namespace bookmarks.Controllers
             _bookmarksDbContext = bookmarksDbContext;
             _userService = userService;
         }
-        public async Task<List<Bookmark>> GetBookmarksAsync()
-        {
-            return await _bookmarksDbContext.Bookmarks
-                .Where(bookmark => bookmark.User == _userService.User).ToListAsync();
-        }
 
-        [HttpPost]
-        public ActionResult AddBookmark(Bookmark bookmark)
+        public ActionResult Index()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            bookmark.User = _userService.User;
-            _bookmarksDbContext.Bookmarks.Add(bookmark);
             return Ok();
         }
     }

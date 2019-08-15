@@ -58,12 +58,17 @@ namespace bookmarks.Services
             }
         }
 
-        public User User
+        public string UPN
         {
             get
             {
-                return IsAuthenticated ?
-                    _bookmarksDbContext.Users.First(user => user.ProviderId == Id) : null;
+                if (_hostingEnvironment.IsDevelopment() || _hostingEnvironment.EnvironmentName == "Docker")
+                {
+                    return "vsdev";
+                }
+
+                return _httpContextAccessor.HttpContext.User.Claims
+                    .FirstOrDefault(c => c.Type == ClaimTypes.Upn)?.Value;
             }
         }
     }
