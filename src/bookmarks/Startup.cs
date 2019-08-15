@@ -1,6 +1,7 @@
-﻿using bookmarks.Middlewares;
+﻿using bookmarks.Infrastructure;
 using bookmarks.Models;
 using bookmarks.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,10 +24,17 @@ namespace bookmarks
         {
             services.AddDbContext<BookmarksDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddAuthentication("AzureEasyAuthentication")
-                .AddScheme<AzureAuthenticationSchemeOptions, AzureAuthenticationHandler>("AzureEasyAuthentication", "AzureEasyAuthentication", null);
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserService, UserService>();
+            services.AddSingleton<CustomCookieAuthenticationEvents>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/.auth/login/twitter";
+                options.ReturnUrlParameter = "post_login_redirect_url";
+                options.LogoutPath = "/.auth/logout?post_logout_redirect_uri=/";
+                options.EventsType = typeof(CustomCookieAuthenticationEvents);
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -44,7 +52,6 @@ namespace bookmarks
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseAzureAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -4,7 +4,8 @@ obj
 bin
 .vscode
 .vs
-
+*.user
+PublishProfiles
 # For Web App
 lib
 site.min.js
