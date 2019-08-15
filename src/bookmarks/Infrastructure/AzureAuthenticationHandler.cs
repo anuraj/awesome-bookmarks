@@ -20,7 +20,8 @@ namespace bookmarks.Infrastructure
         }
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            var uriString = $"{Context.Request.Scheme}://{Context.Request.Host}/.auth/login/twitter?post_login_redirect_url=/";
+            var redirectURI = string.IsNullOrEmpty(Options.RedirectUri) ? "/" : Options.RedirectUri;
+            var uriString = $"{Context.Request.Scheme}://{Context.Request.Host}/.auth/login/{Options.Provider}?post_login_redirect_url={redirectURI}";
             Context.Response.Redirect(uriString);
             await Task.CompletedTask;
         }
@@ -41,12 +42,11 @@ namespace bookmarks.Infrastructure
                     return AuthenticateResult.NoResult();
                 }
 
-                var uriString = $"{Context.Request.Scheme}://{Context.Request.Host}";
                 var jsonResult = string.Empty;
                 var handler = new HttpClientHandler();
                 using (var client = new HttpClient(handler))
                 {
-                    var httpResponseMessage = await client.GetAsync($"{uriString}/.auth/me");
+                    var httpResponseMessage = await client.GetAsync($"{Context.Request.Scheme}://{Context.Request.Host}/.auth/me");
                     jsonResult = await httpResponseMessage.Content.ReadAsStringAsync();
                 }
                 var claimsArray = JArray.Parse(jsonResult);

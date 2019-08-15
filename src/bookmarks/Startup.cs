@@ -24,7 +24,11 @@ namespace bookmarks
             services.AddDbContext<BookmarksDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAuthentication("AzureEasyAuthentication")
-                .AddScheme<AzureAuthenticationOptions, AzureAuthenticationHandler>("AzureEasyAuthentication", null);
+                .AddScheme<AzureAuthenticationOptions, AzureAuthenticationHandler>("AzureEasyAuthentication", options =>
+                {
+                    options.Provider = "twitter";
+                    options.RedirectUri = "/";
+                });
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserService, UserService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -43,7 +47,7 @@ namespace bookmarks
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
