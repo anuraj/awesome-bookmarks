@@ -44,6 +44,7 @@ namespace bookmarks
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseAzureAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

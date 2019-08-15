@@ -4,7 +4,7 @@ namespace bookmarks.Middlewares
 {
     public static class AzureAuthenticationMiddlewareExtensions
     {
-        public static IApplicationBuilder UseEasyAuth(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseAzureAuthentication(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<AzureAuthenticationMiddleware>();
         }
