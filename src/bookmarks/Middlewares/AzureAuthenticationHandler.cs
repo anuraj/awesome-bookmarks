@@ -10,26 +10,27 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 
-namespace bookmarks.Infrastructure
+namespace bookmarks.Middlewares
 {
-    public class AzureAuthenticationHandler : AuthenticationHandler<AzureAuthenticationOptions>
+    public class AzureAuthenticationHandler : AuthenticationHandler<AzureAuthenticationSchemeOptions>
     {
-        public AzureAuthenticationHandler(IOptionsMonitor<AzureAuthenticationOptions> options, ILoggerFactory logger,
-            UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        public AzureAuthenticationHandler(IOptionsMonitor<AzureAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+            : base(options, logger, encoder, clock)
         {
         }
+
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            var redirectURI = string.IsNullOrEmpty(Options.RedirectUri) ? "/" : Options.RedirectUri;
-            var uriString = $"{Context.Request.Scheme}://{Context.Request.Host}/.auth/login/{Options.Provider}?post_login_redirect_url={redirectURI}";
-            Context.Response.Redirect(uriString);
+            var loginuri = $"{Context.Request.Scheme}://{Context.Request.Host}/.auth/login/twitter?post_login_redirect_url=/";
+            Context.Response.Redirect(loginuri);
             await Task.CompletedTask;
         }
+
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             try
             {
-                var easyAuthEnabled = bool.Parse(Environment.GetEnvironmentVariable("EASY_AUTH_ENABLED") ?? "False");
+                var easyAuthEnabled = Context.Request.Headers.ContainsKey("X-MS-CLIENT-PRINCIPAL-ID");
                 if (!easyAuthEnabled)
                 {
                     return AuthenticateResult.NoResult();

@@ -1,4 +1,4 @@
-﻿using bookmarks.Infrastructure;
+﻿using bookmarks.Middlewares;
 using bookmarks.Models;
 using bookmarks.Services;
 using Microsoft.AspNetCore.Builder;
@@ -24,11 +24,7 @@ namespace bookmarks
             services.AddDbContext<BookmarksDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAuthentication("AzureEasyAuthentication")
-                .AddScheme<AzureAuthenticationOptions, AzureAuthenticationHandler>("AzureEasyAuthentication", options =>
-                {
-                    options.Provider = "twitter";
-                    options.RedirectUri = "/";
-                });
+                .AddScheme<AzureAuthenticationSchemeOptions, AzureAuthenticationHandler>("AzureEasyAuthentication", "AzureEasyAuthentication", null);
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserService, UserService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
