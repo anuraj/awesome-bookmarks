@@ -7,6 +7,5 @@ namespace bookmarks.Services
         bool IsAuthenticated { get; }
         string Id { get; }
         string Name { get; }
-        string UPN { get; }
     }
 }

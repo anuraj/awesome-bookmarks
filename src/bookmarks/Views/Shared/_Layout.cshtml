@@ -48,13 +48,13 @@
                                 <a class="nav-link text-dark" href="https://twitter.com/@UserService.Name">Welcome @UserService.Name</a> 
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/.auth/logout?post_logout_redirect_uri=/">Sign out</a>
+                                <a class="nav-link text-dark" asp-action="Signout" asp-controller="Account">Sign out</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/.auth/login/twitter?post_login_redirect_url=/">Log in with Twitter</a>
+                                <a class="nav-link text-dark" href="/signin-twitter">Log in with Twitter</a>
                             </li>
                         }
                     </ul>
