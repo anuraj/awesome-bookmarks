@@ -16,6 +16,6 @@ jobs:
     - name: Devskim
       uses: anuraj/devskim-action@0.8
       with:
-        args: analyse src/
+        args: analyze src/
     - name: Build with dotnet
       run: dotnet publish -c Release
