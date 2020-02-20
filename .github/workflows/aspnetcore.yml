@@ -14,6 +14,8 @@ jobs:
       with:
         version: 2.2.108
     - name: Devskim
-      uses: anuraj/devskim-action@0.7
+      uses: anuraj/devskim-action@0.8
+      with:
+        args: analyse src/
     - name: Build with dotnet
       run: dotnet publish -c Release
