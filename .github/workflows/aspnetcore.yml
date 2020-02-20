@@ -14,6 +14,6 @@ jobs:
       with:
         version: 2.2.108
     - name: Devskim
-      uses: anuraj/devskim-action@0.3
+      uses: anuraj/devskim-action@0.4
     - name: Build with dotnet
       run: dotnet publish -c Release
